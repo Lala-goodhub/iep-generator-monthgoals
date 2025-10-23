@@ -247,7 +247,7 @@ function InputSectionCss({
               <label className="form-label">📄 DOCX 파일</label>
               {!fileValue && (
                 <label htmlFor={fileId} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`upload-box ${isDragging ? 'dragging' : ''} ${isFileDisabled || isLoading || isUploading ? 'disabled' : ''}`} >
-                  {isUploading ? (<div style={{color: '#0369a1'}}> 업로드 중...</div>) : (<div><span className="upload-icon">☁️</span><p className="upload-text">파일 '클릭' 또는 '드래그' </p><p className="upload-hint">(.docx)</p></div>)}
+                  {isUploading ? (<div style={{color: '#0369a1'}}> 업로드 중...</div>) : (<div><span className="upload-icon">☁️</span><p className="upload-text">파일 클릭 또는 드래그 </p><p className="upload-hint">(.docx)</p></div>)}
                 </label>
               )}
               {fileValue && (
