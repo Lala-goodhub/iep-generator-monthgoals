@@ -1,103 +1,86 @@
-import Image from "next/image";
+'use client'; 
+import { useState, useCallback } from 'react'; // (NEW!) useCallback 추가!
+import { useRouter } from 'next/navigation';
 
-export default function Home() {
+// (로그인 페이지)
+export default function LoginPage() {
+  // --- 상태 정의 (100% 동일) ---
+  const [school, setSchool] = useState(''); 
+  const [name, setName] = useState(''); 
+  const [isLoading, setIsLoading] = useState(false); 
+  const [error, setError] = useState(''); 
+  const router = useRouter(); 
+
+  // --- "작성하기" 버튼 핸들러 (NEW!) ✨ '비밀 주방' 🧑‍🍳 호출 로직 추가! ✨ ---
+  const handleSubmit = useCallback(async (e) => { // (NEW!) async 추가! (fetch 쓰려면!)
+    e.preventDefault(); 
+    setIsLoading(true);
+    setError('');
+    if (school.trim() === '' || name.trim() === '') {
+      setError('🚨 학교명과 이름은 필수 입력입니다!'); 
+      setIsLoading(false); 
+      return; 
+    }
+
+    try {
+      // --- ✨ (핵심!) '비밀 주방'(/api/log)에 'POST' 방식으로 '요청' 📞! ---
+      const response = await fetch('/api/log', { // (NEW!) 우리 '비밀 주방' 주소!
+        method: 'POST', // (NEW!) '보내는' 방식!
+        headers: {
+          'Content-Type': 'application/json', // (NEW!) "JSON 형식으로 보낸다!"
+        },
+        body: JSON.stringify({ school, name }), // (NEW!) '학교/이름' 🥩 재료 포장! 🎁
+      });
+
+      // --- ✨ '비밀 주방' 🧑‍🍳의 '응답' 💬 확인! ---
+      if (!response.ok) { // (NEW!) 응답이 '성공'(201) 아니면? ➡️ 에러! 💥
+        const errorData = await response.json(); // (NEW!) 주방 에러 메시지 받기!
+        throw new Error(errorData.error || '로그 기록 실패'); // (NEW!) 에러 던지기! 💥
+      }
+
+      // --- ✨ '성공!' ✅ ➡️ '생성기' 🤖 페이지로 이동! ---
+      console.log('🔥 Log successful!'); // (NEW!) 브라우저 '콘솔'에도 기록!
+      router.push('/generator'); 
+      // (성공 시에는 setIsLoading(false) 할 필요 없음 -> 페이지 이동하니까!)
+
+    } catch (err) {
+      // --- ✨ '요청' 📞 실패 또는 '주방' 🧑‍🍳 에러 💥 처리! ---
+      console.error("🚨 Logging error:", err);
+      setError(err.message || '로그 기록 중 오류 발생'); // (NEW!) 에러 메시지 표시!
+      setIsLoading(false); // (NEW!) 로딩 멈추기!
+    }
+
+    // --- (삭제!) '가짜' 로딩 1초 ➡️ 100% '삭제!' 🗑️ ---
+    // setTimeout(() => { ... }, 1000); 
+
+  }, [school, name, router]); // (NEW!) useCallback 의존성 추가!
+
+  // --- (NEW!) ✨ 여기가 '예쁜 옷' 👕 입은 로그인 화면 (HTML/JSX - 100% 동일!) ---
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="card login-card"> 
+      <header className="card-header">
+        <h1 className="card-title">🌱 AI 월별 IEP 생성기</h1>
+        <p className="card-subtitle">(기본 CSS Ver! ✨)</p>
+      </header>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="form-section">
+          <label htmlFor="school" className="form-label">🏫 학교명</label>
+          <input type="text" id="school" value={school} onChange={(e) => setSchool(e.target.value)} disabled={isLoading} placeholder="예) 새싹초등학교" className="input-text" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="form-section">
+          <label htmlFor="name" className="form-label">👨‍🏫 성함</label>
+          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} placeholder="예) 홍길동" className="input-text" />
+        </div>
+        <div style={{ paddingTop: '1rem' }}>
+          <button type="submit" disabled={isLoading} className="button">
+            {isLoading ? '기록 중...' : '📝 IEP 월별목표 작성하기 🚀'}
+          </button>
+        </div>
+      </form>
+      {error && <div className="error-box"><p>{error}</p></div>}
+      <div style={{ textAlign: 'center', paddingTop: '0.5rem' }}>
+        <a href="/admin" className="admin-link">(관리자 페이지)</a>
+      </div>
     </div>
   );
 }
