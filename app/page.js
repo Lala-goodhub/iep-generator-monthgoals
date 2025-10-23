@@ -1,8 +1,7 @@
 'use client'; 
 import { useState, useCallback } from 'react'; 
 import { useRouter } from 'next/navigation';
-import { auth } from '@/lib/firebase'; // Firebase Auth 연장
-import { signInAnonymously } from 'firebase/auth'; // 익명 로그인 함수
+import { auth } from '@/lib/firebase-auth'; // (✨ NEW!) 새로 만든 파일에서 Auth 가져오기!import { signInAnonymously } from 'firebase/auth'; // 익명 로그인 함수
 
 // (로그인 페이지)
 export default function LoginPage() {
