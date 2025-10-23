@@ -233,7 +233,7 @@ function InputSectionCss({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {/* 방법 1 */}
         <div>
-          <label htmlFor={`text-${fileId}`} className="form-label">✍️ 직접 입력</label>
+          <label htmlFor={`text-${fileId}`} className="form-label">직접 입력</label>
           <textarea id={`text-${fileId}`} rows={4} value={textValue ?? ''} onChange={onTextChange} disabled={isTextDisabled || isLoading || isUploading} placeholder={isTextDisabled ? "(파일 선택됨)" : (isActuallyDisabled ? "(비활성화됨)" : "여기에 입력...")} className="input-textarea" />
         </div>
         
@@ -247,11 +247,11 @@ function InputSectionCss({
               <label className="form-label">📄 DOCX 파일</label>
               {!fileValue && (
                 <label htmlFor={fileId} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`upload-box ${isDragging ? 'dragging' : ''} ${isFileDisabled || isLoading || isUploading ? 'disabled' : ''}`} >
-                  {isUploading ? (<div style={{color: '#0369a1'}}>⏳ 업로드 중...</div>) : (<div><span className="upload-icon">☁️</span><p className="upload-text">파일 '클릭' 🖱️ 또는 '드래그' ✋</p><p className="upload-hint">(.docx)</p></div>)}
+                  {isUploading ? (<div style={{color: '#0369a1'}}> 업로드 중...</div>) : (<div><span className="upload-icon">☁️</span><p className="upload-text">파일 '클릭' 🖱️ 또는 '드래그' </p><p className="upload-hint">(.docx)</p></div>)}
                 </label>
               )}
               {fileValue && (
-                <div className="file-info"><span className="file-name">✅ {fileValue.name}</span><button type="button" onClick={onFileClear} disabled={isActuallyDisabled || isLoading || isUploading} className="file-clear-button">X</button></div>
+                <div className="file-info"><span className="file-name"> [OK] {fileValue.name}</span><button type="button" onClick={onFileClear} disabled={isActuallyDisabled || isLoading || isUploading} className="file-clear-button">X</button></div>
               )}
               <input type="file" id={fileId} accept=".docx" onChange={handleFileClick} disabled={isFileDisabled || isLoading || isUploading} style={{ display: 'none' }} /> 
             </div>
