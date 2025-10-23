@@ -1,3 +1,4 @@
+import { auth } from '@/lib/firebase';
 import { NextResponse } from 'next/server'; 
 import { db } from '@/lib/firebase'; // 4-1에서 만든 'Firebase 설계도' 📝
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'; // Firebase '장부' 🗃️ 연장 🔧 (serverTimestamp ⌚ 포함!)
