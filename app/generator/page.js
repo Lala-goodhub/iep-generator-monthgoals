@@ -88,7 +88,7 @@ export default function GeneratorPage() {
     } else {
         console.log('[DEBUG] File object is null or invalid.');
     }
-  }, [storage]); 
+  }, []); 
 
   // --- 파일 지우기 핸들러 (동일) ---
   const handleFileClear = useCallback((setFile, fileKey) => { 
@@ -234,7 +234,7 @@ function InputSectionCss({
         {/* 방법 1 */}
         <div>
           <label htmlFor={`text-${fileId}`} className="form-label">✍️ 직접 입력</label>
-          <textarea id={`text-${fileId}`} rows={4} value={textValue ?? ''} onChange={onTextChange} disabled={isTextDisabled || isLoading || isUploading} placeholder={isTextDisabled ? '(파일 선택됨)' : (isActuallyDisabled ? '(비활성화됨)' : '여기에 입력...')} className="input-textarea" />
+          <textarea id={`text-${fileId}`} rows={4} value={textValue ?? ''} onChange={onTextChange} disabled={isTextDisabled || isLoading || isUploading} placeholder={isTextDisabled ? "(파일 선택됨)" : (isActuallyDisabled ? "(비활성화됨)" : "여기에 입력...")} className="input-textarea" />
         </div>
         
         {/* 파일 업로드 기능 켜져 있을 때 */}
